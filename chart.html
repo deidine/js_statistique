@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>statistique</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+</head>
+<body>
+    
+    <!-- <button type="submit" id="submit">submit</button> -->
+    <input type="hidden" value="age" id="symptom">
+   
+    <div id="chart-container">
+        <h1>les modeles avec age du patient </h1>
+    
+        <canvas id="mycanvas"></canvas>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    <h1>les modeles avec poids du patient </h1>
+
+        <br>
+        <canvas id="mycanvas2"></canvas>
+        <div class="toolbar">
+            <!-- <a href="https://freefrontend.com/jquery-chart-graph-plugins/">free chart</a> -->
+            
+        </div>
+    </div>
+
+    <!-- javascript -->
+    <script> 
+    console.log(document.getElementById('symptom').value)
+    // const select = document.getElementById('cat1');
+    // select.addEventListener('click', () => {
+        //     count++;
+        //       console.log(`Number of clicks: ${count}`);
+        // });
+        var count = 0;
+        $("#cat1").bind('click', function() {
+        // do something on click
+        count++;
+    } );
+    console.log(`Number of clicks: ${count}`);
+    $( document ).ready(function() {
+        $("#ref").on("click", function () {
+        location.reload();
+         });
+    $(document).on('change', '#cat1', function (e) {
+        // location.reload();
+        console.log(this.options[e.target.selectedIndex].text);
+        document.getElementById("symptom").value = this.options[e.target.selectedIndex].text
+    
+        console.log($('#cat1 option').length);
+    });
+    
+ 
+        $("#cat11").on("click", function () {
+        // alert('ff')
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: "select.php", 
+            // data:datad , 
+            async: false,
+            success: function (data) {
+                // alert('ss')
+    
+                options = '';
+                a = '';
+    console.log(data)
+                $.each(data, function (index, item) {
+                    options += '<option id=option"' + index + '"  value="' + item.symptom + '">' + item.symptom + '</option>';
+                 });
+                $('#cat1').append(options);
+            }
+    
+        });
+        // return nbre_chaise;
+    });
+   
+    // }
+    
+    // select_maladie()
+    var labelage = [];
+    var labeltaille = [];
+    var labeljson = [];
+ 
+        // console.log(labelage)
+        $.ajax({
+                   url: "select.php",
+                   method: "post",
+                   dataType: "json",
+    
+                   success: function (data) {
+                       $.each(data, function (index, item) {
+                           labeljson.push( item.symptom);
+                           // nbre_chaise = item.nombre_chaise;
+                           labelage.push(item.age);
+                           labeltaille.push(item.poids);
+                        //    labelage.push(item.poids);
+                
+    
+                    });
+                       
+    
+                    var chartdata = {
+                           labels: labeljson,
+                           datasets: [
+                               {
+                                   label: 'age',
+                                   fill: false, backgroundColor: "yellow",
+                                  borderColor: "green",
+                                  lineTension: 0, 
+                                   data: labelage
+                               }
+    
+                           ]
+                       };
+                       var chartdatataille = {
+                           labels: labeljson,
+                           datasets: [
+                               {
+                                   label: 'poids',
+                                   fill: false,
+                                  lineTension: 0,
+                                  backgroundColor: "yellow",
+                                  borderColor: "green",
+                                   data: labeltaille
+                               }
+    
+                           ]
+                       };
+    
+                       var ctx = $("#mycanvas");
+                       var ctx2 = $("#mycanvas2");
+                       var barGraph = new Chart(ctx, {
+                        
+                        type: 'line',fill:false,
+                        data: chartdata
+                    });
+                    var carGraph = new Chart(ctx2, {
+                        
+                        type: 'line',fill:false,
+                        
+                        data: chartdatataille
+                    });
+ 
+                       function barGraph() {
+                           subholding.push("" + data[i].subholding);
+                           TotalAccounts.push(data[i].TotalAccounts);
+                           
+                           data.update();
+                        }
+                        function carGraph() {
+                           subholding.push("" + data[i].subholding);
+                           TotalAccounts.push(data[i].TotalAccounts);
+                           
+                           data.update();
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
+            
+    </script>
+<script>
+    
+</script>
+</body>
+</html>
